@@ -10,6 +10,7 @@ readme = "README.md"
 python = "^3.7"
 fastapi = "^0.63.0"
 tortoise-orm = "^0.16.19"
+uvicorn = "^0.13.3"
 
 [tool.poetry.dev-dependencies]
 vulture = "^1.0"

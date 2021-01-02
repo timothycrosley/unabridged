@@ -1,7 +1,7 @@
-from tortoise.models import Model
-from tortoise import fields
-
 from enum import IntEnum
+
+from tortoise import fields
+from tortoise.models import Model
 
 Reaction = IntEnum("Reaction", "NONE HATED DISLIKED INDIFFERENT LIKED LOVED")
 

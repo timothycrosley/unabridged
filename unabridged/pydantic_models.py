@@ -1,6 +1,6 @@
 from tortoise.contrib.pydantic import pydantic_model_creator
 
-from .models import Event, State
+from . import models
 
-Event = pydantic_model_creator(Event)
-State = pydantic_model_creator(State)
+Event = pydantic_model_creator(models.Event)
+State = pydantic_model_creator(models.State)

@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from pydantic_models import Event
+from .pydantic_models import Event
 from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
 
 app = FastAPI(title="Unabridged activity API")
@@ -47,7 +47,7 @@ async def delete_event(event_id: int):
 register_tortoise(
     app,
     db_url="sqlite://:memory:",
-    modules={"models": ["models"]},
+    modules={"models": ["unabridged.models"]},
     generate_schemas=True,
     add_exception_handlers=True,
 )

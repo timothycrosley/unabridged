@@ -1,2 +1,2 @@
 #!/bin/bash
-poetry export > requirements.txt
+poetry export > requirements.txt --without-hashes

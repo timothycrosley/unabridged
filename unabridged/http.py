@@ -2,8 +2,9 @@ from typing import List
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from .pydantic_models import Event
 from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
+
+from .pydantic_models import Event, EventIn
 
 app = FastAPI(title="Unabridged activity API")
 
@@ -18,7 +19,7 @@ async def get_events():
 
 
 @app.post("/events", response_model=Event)
-async def create_event(event: Event):
+async def create_event(event: EventIn):
     event_obj = await Event.create(**event.dict(exclude_unset=True))
     return await Event.from_tortoise_orm(event_obj)
 
@@ -29,7 +30,7 @@ async def get_event(event_id: int):
 
 
 @app.put("/event/{user_id}", response_model=Event, responses={404: {"model": HTTPNotFoundError}})
-async def update_event(event_id: int, event: Event):
+async def update_event(event_id: int, event: EventIn):
     await Event.filter(id=event_id).update(**event.dict(exclude_unset=True))
     return await Event.from_queryset_single(Event.get(id=event_id))
 

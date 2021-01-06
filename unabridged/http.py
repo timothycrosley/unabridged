@@ -23,30 +23,29 @@ for model_name, Model, InModel, DBModel in (
 
 
     @app.post(f"/{model_name}s", response_model=Model)
-    async def create_(event: InModel):
-        event_obj = await DBModel.create(**event.dict(exclude_unset=True))
-        return await Model.from_tortoise_orm(event_obj)
+    async def create_(data: InModel):
+        return await Model.from_tortoise_orm(await DBModel.create(**data.dict(exclude_unset=True)))
 
 
-    @app.get(f"/{model_name}/{{event_id}}", response_model=Model, responses={404: {"model": HTTPNotFoundError}})
-    async def get_(event_id: int):
-        return await Model.from_queryset_single(DBModel.get(id=event_id))
+    @app.get(f"/{model_name}/{{id}}", response_model=Model, responses={404: {"model": HTTPNotFoundError}})
+    async def get_(id: int):
+        return await Model.from_queryset_single(DBModel.get(id=id))
 
 
-    @app.put(f"/{model_name}/{{user_id}}", response_model=Model, responses={404: {"model": HTTPNotFoundError}})
-    async def update_(event_id: int, event: InModel):
-        await models.Model.filter(id=event_id).update(**event.dict(exclude_unset=True))
-        return await Model.from_queryset_single(DBModel.get(id=event_id))
+    @app.put(f"/{model_name}/{{id}}", response_model=Model, responses={404: {"model": HTTPNotFoundError}})
+    async def update_(id: int, data: InModel):
+        await models.Model.filter(id=id).update(**data.dict(exclude_unset=True))
+        return await Model.from_queryset_single(DBModel.get(id=id))
 
 
     @app.delete(
-        f"/{model_name}/{{event_id}}", response_model=Status, responses={404: {"model": HTTPNotFoundError}}
+        f"/{model_name}/{{id}}", response_model=Status, responses={404: {"model": HTTPNotFoundError}}
     )
-    async def delete_(event_id: int):
-        deleted_count = await DBModel.filter(id=event_id).delete()
+    async def delete_(id: int):
+        deleted_count = await DBModel.filter(id=id).delete()
         if not deleted_count:
-            raise HTTPException(status_code=404, detail=f"Event {event_id} not found")
-        return Status(message=f"Deleted event {event_id}")
+            raise HTTPException(status_code=404, detail=f"{model_name.capitalize()} {id} not found")
+        return Status(message=f"Deleted {model_name} {id}")
 
 
 register_tortoise(

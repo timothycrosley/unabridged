@@ -4,7 +4,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
 
-from .pydantic_models import Event, EventIn
+from .pydantic_models import Event, EventIn, State, StateIn
 from . import models
 
 app = FastAPI(title="Unabridged activity API")
